@@ -3,6 +3,12 @@ package com.cooksys.ftd.assignments.objects;
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 public class SimplifiedRational implements IRational {
+	private int numerator;
+	private int denominator;
+	
+	static int[] primeNumbers = new int[] { //Goes up to 101...
+	2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53, 59, 61, 67, 71, 73, 79, 83, 89, 97, 101,
+	};
     /**
      * Determines the greatest common denominator for the given values
      *
@@ -12,7 +18,11 @@ public class SimplifiedRational implements IRational {
      * @throws IllegalArgumentException if a <= 0 or b < 0
      */
     public static int gcd(int a, int b) throws IllegalArgumentException {
-        throw new NotImplementedException();
+        //Options for solving:
+    	//A study up on the Euclidean algorithm
+    	//B some stupid method you made up
+    	
+    	//throw new NotImplementedException();
     }
 
     /**
@@ -29,7 +39,24 @@ public class SimplifiedRational implements IRational {
      * @throws IllegalArgumentException if the given denominator is 0
      */
     public static int[] simplify(int numerator, int denominator) throws IllegalArgumentException {
-        throw new NotImplementedException();
+        if(denominator == 0)
+        	throw new IllegalArgumentException();
+    	
+    	int[] returnRation = new int[2];
+        returnRation[0] = numerator;
+        returnRation[0] = denominator;
+        
+        for(int i = 0; i < primeNumbers.length; i++) {
+        	if(returnRation[0]%primeNumbers[i] == 0 && returnRation[1]%primeNumbers[i] == 0) {
+        		returnRation[0]/=primeNumbers[i];
+        		returnRation[1]/=primeNumbers[i];
+        		//better restart to check we didn't miss anything
+        		i = 0;
+        	}
+        }
+        
+        return returnRation;
+    	//throw new NotImplementedException();
     }
 
     /**
@@ -45,7 +72,12 @@ public class SimplifiedRational implements IRational {
      * @throws IllegalArgumentException if the given denominator is 0
      */
     public SimplifiedRational(int numerator, int denominator) throws IllegalArgumentException {
-        throw new NotImplementedException();
+        if(denominator == 0)
+        	throw new IllegalArgumentException();
+        
+        this.numerator = numerator;
+        this.denominator = denominator;
+    	//throw new NotImplementedException();
     }
 
     /**
@@ -77,7 +109,13 @@ public class SimplifiedRational implements IRational {
      */
     @Override
     public SimplifiedRational construct(int numerator, int denominator) throws IllegalArgumentException {
-        throw new NotImplementedException();
+        this.numerator = numerator;
+    	this.denominator = denominator;
+        
+    	int[] returnRation = simplify(this.numerator, this.denominator);
+    	
+        return new SimplifiedRational(returnRation[0], returnRation[1]);
+    	//throw new NotImplementedException();
     }
 
     /**
@@ -88,7 +126,12 @@ public class SimplifiedRational implements IRational {
      */
     @Override
     public boolean equals(Object obj) {
-        throw new NotImplementedException();
+    	if (obj instanceof SimplifiedRational) {
+    		SimplifiedRational objConvert = (SimplifiedRational)obj;
+    		if(this.numerator == objConvert.getNumerator() && this.denominator == objConvert.getDenominator())
+        	return true;
+    	}
+    	return false;
     }
 
     /**
@@ -102,4 +145,24 @@ public class SimplifiedRational implements IRational {
     public String toString() {
         throw new NotImplementedException();
     }
+    
+    /*Personally added methods*/
+    /*
+    SimplifiedRational add(IRational that) throws IllegalArgumentException {
+		if(that == null)
+			throw new IllegalArgumentException();
+		
+		if(that instanceof Rational) {
+			int commonDenominator = this.getNumerator()*that.getDenominator();
+			
+			int alteredThisNumerator = this.getNumerator()*that.getDenominator();
+			int alteredThatNumerator = that.getNumerator()*this.getDenominator();
+			
+			SimplifiedRational returnRational = new SimplifiedRational(alteredThisNumerator+alteredThatNumerator, commonDenominator);
+			int[] returnRation = simplify(returnRational.numerator, returnRational.denominator);
+	    	
+	        return new SimplifiedRational(returnRation[0], returnRation[1]);
+			//throw new NotImplementedException();
+	}
+	*/
 }

@@ -7,13 +7,13 @@ interface IRational {
 	/**
 	 * @return the numerator of this rational number
 	 */
-	int getNumerator();
+	int getNumerator(); //Has to be overriden
 
 	/**
 	 * @return the denominator of this rational number
 	 */
-	int getDenominator();
-
+	int getDenominator(); //Has to be overriden
+	
 	/**
 	 * Specializable constructor to take advantage of shared code between
 	 * Rational and SimplifiedRational
@@ -29,7 +29,13 @@ interface IRational {
 	 * @throws IllegalArgumentException
 	 *             if the given denominator is 0
 	 */
-	IRational construct(int numerator, int denominator) throws IllegalArgumentException;
+	default IRational construct(int numerator, int denominator) throws IllegalArgumentException{
+		if(denominator == 0)
+			throw new IllegalArgumentException();
+		
+		return null;
+		//I can only see this method being overriden from
+	}
 
 	/**
 	 * negation of rational values
@@ -54,7 +60,7 @@ interface IRational {
 	 *             if the numerator of this rational value is 0
 	 */
 	default IRational invert() throws IllegalStateException {
-		throw new NotImplementedException();
+		return construct(getDenominator(), getNumerator());
 	}
 
 	/**
@@ -69,7 +75,17 @@ interface IRational {
 	 *             if that is null
 	 */
 	default IRational add(IRational that) throws IllegalArgumentException {
-		throw new NotImplementedException();
+		if(that == null)
+			throw new IllegalArgumentException();
+		
+		int commonDenominator = this.getNumerator()*that.getDenominator();
+		
+		int alteredThisNumerator = this.getNumerator()*that.getDenominator();
+		int alteredThatNumerator = that.getNumerator()*this.getDenominator();
+		
+		Rational returnRational = new Rational(alteredThisNumerator+alteredThatNumerator, commonDenominator);
+		
+		return (returnRational);
 	}
 
 	/**
@@ -84,7 +100,17 @@ interface IRational {
 	 *             if that is null
 	 */
 	default IRational sub(IRational that) throws IllegalArgumentException {
-		throw new NotImplementedException();
+		if(that == null)
+			throw new IllegalArgumentException();
+		
+		int commonDenominator = this.getNumerator()*that.getDenominator();
+		
+		int alteredThisNumerator = this.getNumerator()*that.getDenominator();
+		int alteredThatNumerator = that.getNumerator()*this.getDenominator();
+		
+		Rational returnRational = new Rational(alteredThisNumerator-alteredThatNumerator, commonDenominator);
+		
+		return (returnRational);
 	}
 
 	/**
@@ -99,7 +125,12 @@ interface IRational {
 	 *             if that is null
 	 */
 	default IRational mul(IRational that) throws IllegalArgumentException {
-		throw new NotImplementedException();
+		if(that == null)
+			throw new IllegalArgumentException();
+
+		Rational returnRational = new Rational(this.getNumerator()*that.getNumerator(), this.getDenominator()*that.getDenominator());
+		
+		return (returnRational);
 	}
 
 	/**
@@ -114,6 +145,11 @@ interface IRational {
 	 *             if that is null or if the numerator of that is 0
 	 */
 	default IRational div(IRational that) throws IllegalArgumentException {
-		throw new NotImplementedException();
+		if(that == null)
+			throw new IllegalArgumentException();
+
+		Rational returnRational = new Rational(this.getNumerator()*that.getDenominator(), this.getDenominator()*that.getNumerator());
+		
+		return (returnRational);
 	}
 }
